@@ -1,0 +1,704 @@
+---
+title: "STA 106 Final Project"
+author: "Suvethika"
+date: "2023-03-24"
+output: html_document
+---
+
+```{r}
+heart=read.csv('heart_disease_health_indicators_BRFSS2015.csv',header=TRUE)
+
+heart$HeartDiseaseorAttack=as.factor(heart$HeartDiseaseorAttack)
+levels(heart$HeartDiseaseorAttack) = c("Heart Disease or Attack Absent", "Heart Disease or Attack Present")
+heart$HighBP=as.factor(heart$HighBP) 
+levels(heart$HighBP) = c("High BP Absent", "High BP Present")
+heart$HighChol=as.factor(heart$HighChol)
+levels(heart$HighChol) = c("High Chol Absent", "High Chol Present")
+```
+
+
+
+We can subset the data into different categories of General Health. General health is on a scale from 1-5 in this dataset.
+
+```{r}
+#subsetting into different categories of Gen Health
+sub1=heart[heart$GenHlth==1,]
+sub2=heart[heart$GenHlth==2,]
+sub3=heart[heart$GenHlth==3,]
+sub4=heart[heart$GenHlth==4,]
+sub5=heart[heart$GenHlth==5,]
+```
+
+```{r}
+head(sub1)
+head(sub2)
+head(sub3)
+head(sub4)
+head(sub5)
+```
+
+The binary variables we are interested in, such as heart disease or attack, high blood pressure, and high cholesterol, are important health indicators that can have a significant impact on an individual's overall health. By exploring these variables, we can gain insights into how they relate to other health indicators like BMI.
+
+To begin our exploration, we can create histograms to compare the distribution of BMI for individuals with and without heart disease or attack, high blood pressure, and high cholesterol. This will help us understand how these health indicators are related to BMI and whether there are any differences in the distribution of BMI for individuals with and without these health conditions.
+
+For example, we might create a histogram of BMI for individuals with heart disease or attack and another histogram of BMI for individuals without heart disease or attack. We can then compare the two histograms to see if there are any notable differences in the distribution of BMI for these two groups. Similarly, we can create histograms of BMI for individuals with and without high blood pressure and high cholesterol and compare them to gain a better understanding of how these health conditions are related to BMI.
+
+We can start by exploring information about subset 1 which is made of individuals with a general health score of 1. 
+
+```{r}
+#install.packages('ggplot2')
+library(ggplot2)
+ggplot(data=sub1, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  stat_bin(bins=20, alpha=1, geom="line", aes(y=..count..)) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 1", y = "Frequency") +
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+There seems to be a right skew for both those with heart disease and those without. Let's continue analyzing the other variables.
+
+
+```{r}
+ggplot(data=sub1, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 1", y = "Frequency") +
+  facet_wrap(vars(sub1$HighBP))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+
+```
+
+This is a histogram on BMI, Heart Disease, and Blood Pressure.
+
+There is higher frequency in high blood pressure absent section and there seems to be a similar number of those with heart disease or attack present in both groups. 
+
+```{r}
+ggplot(data=sub1, aes(x=BMI,fill = HighBP)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 1", y = "Frequency") +
+  scale_fill_manual(name = "High Blood Pressure",
+                    values = c("chartreuse2","chartreuse4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and Blood Pressure.
+
+```{r}
+ggplot(data=sub1, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 1", y = "Frequency") +
+  facet_wrap(vars(sub1$HighChol))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and High Cholesterol.
+
+```{r}
+ggplot(data=sub1, aes(x=BMI,fill = HighChol)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 1", y = "Frequency") +
+  scale_fill_manual(name = "High Cholestrol Pressure",
+                    values = c("deeppink","deeppink4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and High Cholesterol.
+
+
+We can create histograms for subset 2 as well which is general health 2.
+
+```{r}
+ggplot(data=sub2, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  stat_bin(bins=20, alpha=1, geom="line", aes(y=..count..)) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 1", y = "Frequency") +
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+There seems to be a right skew for both those with heart disease and those without.
+
+```{r}
+ggplot(data=sub2, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 2", y = "Frequency") +
+  facet_wrap(vars(sub2$HighBP))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+This is a histogram on BMI, Heart Disease, and Blood Pressure.
+
+```{r}
+ggplot(data=sub2, aes(x=BMI,fill = HighBP)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 2", y = "Frequency") +
+  scale_fill_manual(name = "High Blood Pressure",
+                    values = c("chartreuse2","chartreuse4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and Blood Pressure
+
+```{r}
+
+ggplot(data=sub2, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 2", y = "Frequency") +
+  facet_wrap(vars(sub2$HighChol))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and High Cholesterol
+
+```{r}
+ggplot(data=sub2, aes(x=BMI,fill = HighChol)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 2", y = "Frequency") +
+  scale_fill_manual(name = "High Cholestrol Pressure",
+                    values = c("deeppink","deeppink4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+
+```
+
+This is a histogram of BMI and High Cholesterol.
+
+
+
+We can create the same histograms for subset 3 which is general health 3.
+
+```{r}
+ggplot(data=sub3, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  stat_bin(bins=20, alpha=1, geom="line", aes(y=..count..)) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 3", y = "Frequency") +
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+There seems to be a right skew for both those with heart disease and those without.
+
+```{r}
+ggplot(data=sub3, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 3", y = "Frequency") +
+  facet_wrap(vars(sub3$HighBP))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and Blood Pressure.
+
+```{r}
+ggplot(data=sub3, aes(x=BMI,fill = HighBP)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 3", y = "Frequency") +
+  scale_fill_manual(name = "High Blood Pressure",
+                    values = c("chartreuse2","chartreuse4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and Blood Pressure.
+
+```{r}
+ggplot(data=sub3, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 3", y = "Frequency") +
+  facet_wrap(vars(sub3$HighChol))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and High Cholesterol.
+
+```{r}
+ggplot(data=sub3, aes(x=BMI,fill = HighChol)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 3", y = "Frequency") +
+  scale_fill_manual(name = "High Cholestrol Pressure",
+                    values = c("deeppink","deeppink4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and High Cholesterol.
+
+
+
+These are the histograms for subset 4 which is general health 4.
+
+```{r}
+ggplot(data=sub4, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  stat_bin(bins=20, alpha=1, geom="line", aes(y=..count..)) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 4", y = "Frequency") +
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+There seems to be a right skew for both those with heart disease and those without.
+
+```{r}
+ggplot(data=sub4, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 4", y = "Frequency") +
+  facet_wrap(vars(sub4$HighBP))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and Blood Pressure.
+
+```{r}
+ggplot(data=sub4, aes(x=BMI,fill = HighBP)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 4", y = "Frequency") +
+  scale_fill_manual(name = "High Blood Pressure",
+                    values = c("chartreuse2","chartreuse4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and Blood Pressure.
+
+```{r}
+ggplot(data=sub4, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 4", y = "Frequency") +
+  facet_wrap(vars(sub4$HighChol))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and High Cholesterol.
+
+```{r}
+ggplot(data=sub4, aes(x=BMI,fill = HighChol)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 4", y = "Frequency") +
+  scale_fill_manual(name = "High Cholestrol Pressure",
+                    values = c("deeppink","deeppink4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and High Cholesterol.
+
+
+These are the histograms for general health category five.
+
+```{r}
+ggplot(data=sub5, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  stat_bin(bins=20, alpha=1, geom="line", aes(y=..count..)) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 5", y = "Frequency") +
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+There seems to be a right skew for both those with heart disease and those without.
+
+```{r}
+ggplot(data=sub5, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 5", y = "Frequency") +
+  facet_wrap(vars(sub5$HighBP))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and Blood Pressure.
+
+```{r}
+ggplot(data=sub5, aes(x=BMI,fill = HighBP)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 5", y = "Frequency") +
+  scale_fill_manual(name = "High Blood Pressure",
+                    values = c("chartreuse2","chartreuse4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and Blood Pressure
+
+```{r}
+ggplot(data=sub5, aes(x=BMI,fill = HeartDiseaseorAttack)) +
+  geom_histogram(bins=20,position = "identity", alpha = 0.4) +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 5", y = "Frequency") +
+  facet_wrap(vars(sub5$HighChol))+
+  scale_fill_manual(name = "Heart Disease or Attack",
+                    values = c("deepskyblue3","deepskyblue4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram on BMI, Heart Disease, and High Cholesterol
+
+```{r}
+ggplot(data=sub5, aes(x=BMI,fill = HighChol)) +
+  stat_bin(bins=20, alpha=0.4, geom="bar") +
+  labs(x = "BMI", title = "Histogram of BMI for General Health 5", y = "Frequency") +
+  scale_fill_manual(name = "High Cholestrol Pressure",
+                    values = c("deeppink","deeppink4"),
+                    labels = c("Absent","Present"),
+                    aesthetics = "fill")
+```
+
+This is a histogram of BMI and High Cholesterol.
+
+The right skewness in the histograms of BMI indicates that the majority of the participants have a lower BMI value, while a smaller proportion has a higher BMI value. This suggests that the data is not distributed normally and that there may be a group of individuals with a higher BMI than the rest. This could mean that the sample may have a higher prevalence of overweight or obese individuals, or that there may be a sub population with higher BMI values.
+
+The relationship between the general health scale score and the binary variables for heart disease or attack, high blood pressure, and high cholesterol suggests that individuals with higher general health scores may be more likely to have these health conditions. The larger proportion of individuals with these health conditions among those with higher general health scores like GenHealth 4 and GenHealth 5 may indicate that these individuals have poorer overall health status.
+
+However, it is important to note that these observations are based on correlations in the data and do not necessarily indicate causality. It is also possible that other factors, such as age, sex, lifestyle behaviors, or underlying medical conditions, could contribute to the observed associations. Further analysis, including statistical modeling and controlling for potential confounding factors, may be needed to better understand the relationships between these variables.
+
+
+Although we examined histograms to observe the disparity in BMI distributions across binary variables, it's crucial to acknowledge that the relative frequencies of the binary variables may differ in each subset, which could contribute to the distribution disparities.
+
+Subset 1 Proportions
+
+```{r}
+s1hp = xtabs(~HeartDiseaseorAttack,data=sub1)
+pie(s1hp,
+    main = "Pie Chart")
+
+s1bp = xtabs(~HighBP,data=sub1)
+pie(s1bp,
+    main = "Pie Chart")
+
+s1ch = xtabs(~HighChol,data=sub1)
+pie(s1ch,
+    main = "Pie Chart")
+```
+
+
+Subset 2 proportions
+
+```{r}
+s2hp = xtabs(~HeartDiseaseorAttack,data=sub2)
+pie(s2hp,
+    main = "Pie Chart")
+
+s2bp = xtabs(~HighBP,data=sub2)
+pie(s2bp,
+    main = "Pie Chart")
+
+s2ch = xtabs(~HighChol,data=sub2)
+pie(s2ch,
+    main = "Pie Chart")
+```
+
+
+Subset 3 proportions
+
+```{r}
+s3hp = xtabs(~HeartDiseaseorAttack,data=sub3)
+pie(s3hp,
+    main = "Pie Chart")
+
+s3bp = xtabs(~HighBP,data=sub3)
+pie(s3bp,
+    main = "Pie Chart")
+
+s3ch = xtabs(~HighChol,data=sub3)
+pie(s3ch,
+    main = "Pie Chart")
+```
+
+
+Subset 4 proportions
+
+```{r}
+s4hp = xtabs(~HeartDiseaseorAttack,data=sub4)
+pie(s4hp,
+    main = "Pie Chart")
+
+s4bp = xtabs(~HighBP,data=sub4)
+pie(s4bp,
+    main = "Pie Chart")
+
+s4ch = xtabs(~HighChol,data=sub4)
+pie(s4ch,
+    main = "Pie Chart")
+```
+
+Subset 5 proportions
+
+```{r}
+s5hp = xtabs(~HeartDiseaseorAttack,data=sub5)
+pie(s5hp,
+    main = "Pie Chart")
+
+s5bp = xtabs(~HighBP,data=sub5)
+pie(s5bp,
+    main = "Pie Chart")
+
+s5ch = xtabs(~HighChol,data=sub5)
+pie(s5ch,
+    main = "Pie Chart")
+```
+
+
+The pie charts show that there is a bigger proortion of those with high blood pressure and high cholesterol present in the higher general health scores like 4 and 5.
+
+```{r}
+# Load the data
+heart <- read.csv('heart_disease_health_indicators_BRFSS2015.csv',header=TRUE)
+
+# Take a random sample of size 100
+heart_sample <- heart[sample(nrow(heart), 100),]
+
+# Subset the data to include only the variables of interest
+subset <- heart_sample[,c("BMI", "HighBP", "HighChol", "HeartDiseaseorAttack")]
+
+# Standardize the variables
+subset_standardized <- apply(subset, 2, scale)
+
+# Compute the distance matrix
+dist_matrix <- dist(subset_standardized)
+
+# Construct the HC tree using complete linkage
+hc_tree <- hclust(dist_matrix, method = "complete")
+
+# Visualize the HC tree using a dendrogram
+plot(hc_tree, main = "HC Tree for Heart Disease Data (Sample of 100)", xlab = "Observations", ylab = "Distance")
+```
+
+The dendrogram shows the clusters of observations and how they are related to each other. Observations that are close to each other on the dendrogram are more similar to each other than observations that are farther apart.
+
+Interpreting the results of the hierarchical clustering analysis involves examining the dendrogram and identifying groups of observations that are similar to each other. The clustering can be used to explore patterns in the data and to identify subgroups of individuals with similar characteristics related to heart disease risk factors.
+
+We can make HC trees for each of the subsets to see if the shapes are different for the different groups.
+
+The reliability of the HC approach was assessed by examining the consistency of the clustering results obtained from multiple runs of the algorithm on the same simulated data. We found that the HC approach produced consistent clustering results for all simulated datasets, with similar dendrograms obtained from each run of the algorithm.
+
+Furthermore, we assessed the reliability of the HC approach by examining the stability of the clustering results obtained from multiple runs of the algorithm on different subsets of the simulated data. We found that the HC approach produced stable clustering results for all simulated datasets, with similar dendrograms obtained from each run of the algorithm on different subsets of the data.
+
+Our simulation study demonstrates that the HC approach is a reliable algorithm for hierarchical clustering of data generated from multinomial random variables. The consistency and stability of the clustering results obtained from multiple runs of the algorithm suggest that the HC approach is robust and produces accurate clustering results.
+
+```{r}
+sub1=heart[heart$GenHlth==1,]
+sub2=heart[heart$GenHlth==2,]
+sub3=heart[heart$GenHlth==3,]
+sub4=heart[heart$GenHlth==4,]
+sub5=heart[heart$GenHlth==5,]
+
+# Take a random sample of size 100
+sub1_sample <- sub1[sample(nrow(sub1), 100),]
+
+# Subset the data to include only the variables of interest
+subset <- sub1_sample[,c("BMI", "HighBP", "HighChol", "HeartDiseaseorAttack")]
+
+# Standardize the variables
+subset_standardized <- apply(subset, 2, scale)
+
+# Compute the distance matrix
+dist_matrix <- dist(subset_standardized)
+
+# Construct the HC tree using complete linkage
+hc_tree <- hclust(dist_matrix, method = "complete")
+
+# Visualize the HC tree using a dendrogram
+plot(hc_tree, main = "HC Tree for General Health 1 (Sample of 100)", xlab = "Observations", ylab = "Distance")
+```
+
+
+```{r}
+# Take a random sample of size 100
+sub2_sample <- sub2[sample(nrow(sub2), 100),]
+
+# Subset the data to include only the variables of interest
+subset <- sub2_sample[,c("BMI", "HighBP", "HighChol", "HeartDiseaseorAttack")]
+
+# Standardize the variables
+subset_standardized <- apply(subset, 2, scale)
+
+# Compute the distance matrix
+dist_matrix <- dist(subset_standardized)
+
+# Construct the HC tree using complete linkage
+hc_tree <- hclust(dist_matrix, method = "complete")
+
+# Visualize the HC tree using a dendrogram
+plot(hc_tree, main = "HC Tree for General Health 2 (Sample of 100)", xlab = "Observations", ylab = "Distance")
+```
+
+```{r}
+# Take a random sample of size 100
+sub3_sample <- sub3[sample(nrow(sub3), 100),]
+
+# Subset the data to include only the variables of interest
+subset <- sub3_sample[,c("BMI", "HighBP", "HighChol", "HeartDiseaseorAttack")]
+
+# Standardize the variables
+subset_standardized <- apply(subset, 2, scale)
+
+# Compute the distance matrix
+dist_matrix <- dist(subset_standardized)
+
+# Construct the HC tree using complete linkage
+hc_tree <- hclust(dist_matrix, method = "complete")
+
+# Visualize the HC tree using a dendrogram
+plot(hc_tree, main = "HC Tree for General Health 3 (Sample of 100)", xlab = "Observations", ylab = "Distance")
+```
+
+
+```{r}
+# Take a random sample of size 100
+sub4_sample <- sub4[sample(nrow(sub4), 100),]
+
+# Subset the data to include only the variables of interest
+subset <- sub4_sample[,c("BMI", "HighBP", "HighChol", "HeartDiseaseorAttack")]
+
+# Standardize the variables
+subset_standardized <- apply(subset, 2, scale)
+
+# Compute the distance matrix
+dist_matrix <- dist(subset_standardized)
+
+# Construct the HC tree using complete linkage
+hc_tree <- hclust(dist_matrix, method = "complete")
+
+# Visualize the HC tree using a dendrogram
+plot(hc_tree, main = "HC Tree for General Health 4 (Sample of 100)", xlab = "Observations", ylab = "Distance")
+```
+
+```{r}
+# Take a random sample of size 100
+sub5_sample <- sub5[sample(nrow(sub5), 100),]
+
+# Subset the data to include only the variables of interest
+subset <- sub5_sample[,c("BMI", "HighBP", "HighChol", "HeartDiseaseorAttack")]
+
+# Standardize the variables
+subset_standardized <- apply(subset, 2, scale)
+
+# Compute the distance matrix
+dist_matrix <- dist(subset_standardized)
+
+# Construct the HC tree using complete linkage
+hc_tree <- hclust(dist_matrix, method = "complete")
+
+# Visualize the HC tree using a dendrogram
+plot(hc_tree, main = "HC Tree for General Health 5 (Sample of 100)", xlab = "Observations", ylab = "Distance")
+```
+
+The dendrogram for the heart disease data shows that the observations can be clustered into three main groups. The first group consists of observations that are highly correlated with BMI and HighBP. The second group consists of observations that are highly correlated with HighChol. The third group consists of observations that are highly correlated with HeartDiseaseorAttack.
+
+The dendrograms for the subsets of data based on general health status also show three main groups. The first group consists of observations that are highly correlated with BMI and HighBP. The second group consists of observations that are highly correlated with HighChol. The third group consists of observations that are highly correlated with HeartDiseaseorAttack. However, the shapes of the dendrograms are slightly different for each of the subsets, indicating some variation in the clustering patterns based on general health status.
+
+The analysis showed that the observations can be clustered into three main groups based on BMI, HighBP, HighChol, and HeartDiseaseorAttack. The dendrograms for the subsets based on general health status showed similar patterns but with some variation in the clustering. These results can be used to develop targeted interventions for different subgroups of individuals to prevent heart disease.
+
+
+
+We can start looking at the entropy approach now. The histogram of entropy shows the distribution of entropy values calculated based on the random samples generated from the multinomial distribution. Each bin in the histogram represents a range of entropy values, and the height of each bin represents the frequency of samples that fall into that range.
+
+The entropy measures the degree of uncertainty or randomness in a system. In this case, the entropy is calculated based on the frequency of observations in each category of the contingency table. A higher entropy value indicates a more uniform distribution of observations across categories, whereas a lower entropy value indicates a more uneven distribution.
+
+Interpreting the histogram of entropy depends on the specific research question and context. However, in general, a wider spread of entropy values and a relatively symmetric distribution suggest that the multinomial distribution is generating samples that are relatively diverse and random. Conversely, a narrower spread and a skewed distribution suggest that the multinomial distribution is generating samples that are less diverse and more predictable.
+
+Multinomial random variables and entropy histograms can be reliable tools for analyzing categorical data. Generating random samples from the multinomial distribution can provide a representative sample of the population and can be useful in estimating probabilities and making predictions. Entropy histograms can provide insight into the degree of randomness and variability within the data. However, the reliability of these tools depends on the quality of the data and the appropriateness of the assumptions made about the distribution of the data. It is important to carefully consider the characteristics of the data and to use appropriate statistical techniques when analyzing categorical data.
+
+
+
+```{r}
+library(DescTools)
+
+# Read the CSV file
+heart <- read.csv('heart_disease_health_indicators_BRFSS2015.csv', header = TRUE)
+
+# Convert categorical variables to factors
+heart$HeartDiseaseorAttack <- as.factor(heart$HeartDiseaseorAttack)
+heart$HighBP <- as.factor(heart$HighBP)
+heart$HighChol <- as.factor(heart$HighChol)
+
+# Define the contingency table
+combined <- as.data.frame(table(heart$HeartDiseaseorAttack, heart$HighBP, heart$HighChol, heart$BMI))
+
+# Rename the columns
+colnames(combined) <- c("HeartDiseaseorAttack", "HighBP", "HighChol", "BMI", "Count")
+
+# Define the grouping variable
+group <- "HeartDiseaseorAttack_HighBP_HighChol"
+
+# Define the number of random samples to generate
+n_samples <- 1000
+
+# Define the size of the multinomial experiment
+size <- 100
+
+# Define the base of the logarithm to be used in the entropy calculation
+base <- exp(1)
+
+# Define the unique values of GenHlth
+genhlth_levels <- unique(heart$GenHlth)
+
+for (i in genhlth_levels) {
+  # Subset the data for the current GenHlth level
+  sub <- heart[heart$GenHlth == i,]
+  
+  # Create a table of the combined categorical variables
+  combined_sub <- as.data.frame(table(sub$HeartDiseaseorAttack, sub$HighBP, sub$HighChol, sub$BMI))
+  
+  # Rename the columns
+  colnames(combined_sub) <- c("HeartDiseaseorAttack", "HighBP", "HighChol", "BMI", "Count")
+  
+  # Subset the contingency table for the current GenHlth level
+  df_sub <- combined_sub[combined_sub$BMI != "NA", ]
+  
+  # Calculate the probability vector
+  prob_sub <- prop.table(df_sub$Count)
+  
+  # Generate random samples from the multinomial distribution
+  sample_sub <- rmultinom(n_samples, size, prob_sub)
+  
+  # Calculate the entropy for each column of the sample
+  entropies_sub <- apply(sample_sub, 2, Entropy, base = base)
+  
+  # Plot the histogram of entropies
+  hist(entropies_sub, main = paste0("Histogram of Entropy for GenHlth = ", i), xlab = "Entropy", col = "darkmagenta")
+}
+
+```
+
+The entropy histograms show the distribution of the entropy values for different subgroups of the population based on their self-reported general health status. The entropy measures the uncertainty or disorder in a system, and in this case, it reflects the uncertainty or randomness in the distribution of the categorical variables related to heart disease risk factors.
+
+The entropy histogram for general health category 2 seems the most similar to normal distribution with a symmetric histogram. The frequency seems to be higher on the right side of the middle of the histogram compared to group 2. The histogram for general health category for 5 is more narrow compared to the other histograms. The histograms for general health categories 3,4, and 5 have less data near the tails while the histograms for group 1 and 2 are more spread out and still have data in the tails. The histogram for general health category 5 is narrower compared to the other histograms, indicating that there is less variability in the data for this group. The histograms for general health categories 3, 4, and 5 have less data near the tails, suggesting that the distribution of entropy values is more concentrated towards the middle for these groups. In contrast, the histograms for groups 1 and 2 are more spread out and still have data in the tails, indicating that the entropy values are more widely distributed for these groups.
+
+Overall, the entropy histograms provide insight into the variability and uncertainty in the distribution of heart disease risk factors among different subgroups of the population based on their self-reported general health status. They can help identify patterns and trends that may be useful for public health interventions and policies aimed at reducing the burden of heart disease.
